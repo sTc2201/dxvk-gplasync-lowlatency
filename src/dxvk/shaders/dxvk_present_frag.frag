@@ -4,7 +4,7 @@
 
 #include "dxvk_present_common.glsl"
 
-vec3 srgb_to_linear(vec3 c) {
+vec3 srgb_to_linear2(vec3 c) {
   vec3 linearSection = c / 12.92;
   vec3 powerSection  = pow((c + 0.055) / 1.055, vec3(2.4));
   return mix(linearSection, powerSection, step(vec3(0.04045), c));
@@ -23,7 +23,7 @@ void main() {
 
   vec4 src = texelFetch(s_image, coord, 0);
 
-  vec3 processed = rec709_encode(srgb_to_linear(src.rgb));
+  vec3 processed = rec709_encode(srgb_to_linear2(src.rgb));
 
   o_color = composite_image(vec4(processed, src.a));
   o_color = sc_rgb_to_output(o_color);
