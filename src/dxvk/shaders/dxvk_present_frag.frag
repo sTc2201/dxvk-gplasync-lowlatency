@@ -23,10 +23,10 @@ layout(location = 0) out vec4 o_color;
 void main() {
   ivec2 coord = ivec2(gl_FragCoord.xy) + src_offset - dst_offset;
 
-  vec3 sampled = texelFetch(s_image, coord, 0).xyz;
-  sampled = rec709encode(srgbdecode(sampled));
+  vec4 src = texelFetch(s_image, coord, 0);
+  vec3 processed = rec709encode(srgbdecode(src.rgb));
 
-  o_color = input_to_sc_rgb(vec4(sampled, 1.0));
+  o_color = input_to_sc_rgb(vec4(processed, src.a));
   o_color = composite_image(o_color);
   o_color = sc_rgb_to_output(o_color);
 }
