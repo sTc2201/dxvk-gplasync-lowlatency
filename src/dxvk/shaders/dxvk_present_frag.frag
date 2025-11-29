@@ -24,9 +24,9 @@ void main() {
   ivec2 coord = ivec2(gl_FragCoord.xy) + src_offset - dst_offset;
 
   vec4 src = texelFetch(s_image, coord, 0);
-  vec3 processed = rec709encode(srgbdecode(src.rgb));
 
-  o_color = input_to_sc_rgb(vec4(processed, src.a));
-  o_color = composite_image(o_color);
-  o_color = sc_rgb_to_output(o_color);
+  vec3 linear = srgbdecode(src.rgb);
+  vec3 rec709_encoded = rec709encode(linear);
+
+  o_color = vec4(rec709_encoded, src.a);
 }
